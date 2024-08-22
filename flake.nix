@@ -18,35 +18,37 @@
             inherit system;
             overlays = [inputs.cargo2nix.overlays.default (import inputs.rust-overlay)];
           };
+          runtimeDeps = with pkgs; [
+            wayland libxkbcommon libGL
+          ];
+          
           rustPkgs = pkgs.rustBuilder.makePackageSet {
             inherit rustVersion;
             packageFun = import ./Cargo.nix;
             packageOverrides = pkgs: pkgs.rustBuilder.overrides.all ++ [
               (pkgs.rustBuilder.rustLib.makeOverride {
-                name = "rust-analyzer";
+                name = "counter";
                 overrideAttrs = drv: {
                   propagatedNativeBuildInputs = drv.propagatedNativeBuildInputs or [ ] ++ (with pkgs; [
                     pkg-config
-                    wayland
-                    libxkbcommon
-                    libGL
-                  ]);
+                    makeWrapper
+                  ] ++ runtimeDeps);
+                  postFixup = ''
+                    patchelf --set-rpath ${pkgs.lib.makeLibraryPath runtimeDeps} $bin/bin/counter
+                  '';
                 };
               })
             ];
           };
         in {
           packages = rec {
-            iced_nix = (rustPkgs.workspace.counter {}).bin;
-            default = iced_nix;
+            counter = (rustPkgs.workspace.counter {}).bin;
+            default = counter;
           };
           devShells.default = pkgs.mkShell rec {
             buildInputs = with pkgs; [
               pkg-config
-              wayland
-              libxkbcommon
-              libGL
-              
+            ] ++ runtimeDeps ++ [
               rust-analyzer-unwrapped
               (rust-bin.stable.${rustVersion}.default.override { extensions = [ "rust-src" ]; })
             ];

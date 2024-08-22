@@ -5,20 +5,24 @@ This repository provides example for building counter example for [ICED](https:/
 Code is taken from the repo, with minor modifications.
 
 In order to build those steps were needed:
+1. Run `nix develop`, this will initilize the shell with all the required dependencies
+```
+nix develop 
+```
 
-1. Generate lock file. Result already in repo, so it is needed only then you will be recreating it in your project.
+2. Generate lock file. Result already in repo, so it is needed only then you will be recreating it in your project.
 
 ```
 cargo check
 ```
 
-2. Generate Cargo.nix. Again result already in repo, so it is needed only then you will be recreating it in your project.
+3. Generate Cargo.nix. Again result already in repo, so it is needed only then you will be recreating it in your project.
 
 ```
 nix run github:cargo2nix/cargo2nix
 ```
 
-3. nix build
+4. nix build
 
 ```
 nix build

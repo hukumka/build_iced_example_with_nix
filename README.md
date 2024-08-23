@@ -6,7 +6,7 @@ Code is taken from the repo, with minor modifications.
 
 In order to build those steps were needed:
 
-1. Initilize the shell by running `nix develop`
+1. Initilize the shell by running `nix develop` \n
 ```nix develop```
 
 3. Generate lock file. Result already in repo, so it is needed only then you will be recreating it in your project.

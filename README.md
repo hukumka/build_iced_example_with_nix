@@ -8,7 +8,9 @@ In order to build those steps were needed:
 
 1. Initilize the shell by running `nix develop`.
 
-```nix develop```
+```
+nix develop
+```
 
 3. Generate lock file. Result already in repo, so it is needed only then you will be recreating it in your project.
 
